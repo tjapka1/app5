@@ -1,18 +1,20 @@
 package ru.tjapka.springCourse.Models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "book")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
+@Builder
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,10 +31,16 @@ public class Book {
     @NotNull
     private String author;
     @NotNull
+    @Max(value = 2024, message = "max 2024")
     @Column(name = "year")
     private int year;
     @ManyToOne
     @JoinColumn(name = "person_id")
-    private Person person;
+    private Person owner;
+    @Column(name = "taken_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date takenAt;
+    @Transient
+    private boolean expired;
 
 }

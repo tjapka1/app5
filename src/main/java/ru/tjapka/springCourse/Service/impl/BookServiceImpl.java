@@ -1,66 +1,79 @@
 package ru.tjapka.springCourse.Service.impl;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.tjapka.springCourse.DTO.PersonDTO;
 import ru.tjapka.springCourse.Models.Book;
 import ru.tjapka.springCourse.Models.Person;
 import ru.tjapka.springCourse.Reposotory.BookRepository;
 import ru.tjapka.springCourse.Reposotory.PersonRepository;
 import ru.tjapka.springCourse.Service.stand.BookService;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
+
 @Service
 public class BookServiceImpl implements BookService {
     @Autowired
     BookRepository bookRepository;
     @Autowired
     PersonRepository personRepository;
-
     @Override
-    public List<Book> getAllBooks() {
-       return bookRepository.bookAll();
+    public List<Book> getAllBooks(boolean sortByYear) {
+        if (sortByYear) {
+            return bookRepository.findAll(Sort.by("year"));
+        }else {
+            return bookRepository.findAll();
+        }
     }
-
+    @Override
+    public List<Book> getAllBooksWithPagination(int page, int booksPerPage, boolean sortByYear) {
+        if (sortByYear) {
+            return bookRepository.findAll(PageRequest.of(page, booksPerPage, Sort.by("year"))).getContent();
+        }else {
+            return bookRepository.findAll(PageRequest.of(page, booksPerPage)).getContent();
+        }
+    }
     @Override
     public Book getBookById(long id) {
-        return bookRepository.findBookById(id);
+        Optional<Book> book = bookRepository.findById(id);
+        return book.orElse(null);
     }
-
     @Override
-    public Book addBook(Book book) {
-        return bookRepository.save(book);
+    public void addBook(Book book) {
+        bookRepository.save(book);
     }
-
     @Override
-    public Book updateBook(long id, Book updatedbook) {
+    public void updateBook(long id, Book updatedbook) {
         Book toUpdatebook = bookRepository.findById(id).orElse( new Book());
         toUpdatebook.setTitle(updatedbook.getTitle());
         toUpdatebook.setAuthor(updatedbook.getAuthor());
         toUpdatebook.setYear(updatedbook.getYear());
-        bookRepository.save(toUpdatebook);
-        return toUpdatebook;
-    }
+        toUpdatebook.setOwner(toUpdatebook.getOwner());
 
+        bookRepository.save(toUpdatebook);
+    }
     @Override
     public void deleteBook(long id) {
         bookRepository.deleteById(id);
-
     }
-
-    public List<Book> getAllBooksByPersonId(long id) {
-        return bookRepository.findAllBooksByPersonId(id);
-    }
-
+    @Override
     public Person getBookOwner(long bookId) {
         return personRepository.findOwner(bookId);
     }
-
-    public void release(long id) {
-        bookRepository.release(id);
+    @Override
+    public void release(long bookId) {
+        bookRepository.release(bookId);
     }
-
-    public void assign(long bookId, long PersonId) {
-        bookRepository.assign(bookId, PersonId);
+    @Override
+    public void assign(long bookId, long PersonId, Date takeAt) {
+        bookRepository.assign(bookId, PersonId, takeAt);
+    }
+    public List<Book> searchBookByTitle(String title) {
+        return bookRepository.findByTitleStartingWith(title);
     }
 }

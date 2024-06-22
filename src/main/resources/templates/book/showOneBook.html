@@ -27,7 +27,8 @@
 
 <div th:if="${owner}">
     <span>Книга сейчас у: </span>
-    <a th:href="@{/people/{id}(id=${owner.getId()})}" th:text="${owner.getFirstName() + ' ' + owner.getLastName()}">name</a>
+    <a th:href="@{/people/{id}(id=${owner.getId()})}" th:text="${owner.getFirstName() + ' ' + owner.getLastName()}"
+       th:style="${book.isExpired()} ? 'color : red' : 'color:black'">>name</a>
     <form th:method="PATCH" th:action="@{/book/{id}/release(id=${book.getId()})}">
         <input type="submit" value="Освободить Книгу"/>
     </form>
@@ -45,7 +46,7 @@
     </form>
 </div>
 <hr>
-<a href="/book">Home</a>
+<a href="/book">All Books</a>
 <hr>
 
 </body>

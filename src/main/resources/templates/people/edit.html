@@ -13,11 +13,15 @@
     <br/>
     <label for="lastname">Enter lastname: </label>
     <input type="text" th:field="*{lastName}" id="lastname"/>
-    <div style="color: red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastMame}">Lastname Error</div>
+    <div style="color: red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Lastname Error</div>
     <br/>
-    <label for="lastname">Enter year: </label>
-    <input type="text" th:field="*{year}" id="year"/>
-    <div style="color: red" th:if="${#fields.hasErrors('year')}" th:errors="*{year}">year Error</div>
+    <label for="email">Enter email: </label>
+    <input type="text" th:field="*{email}" id="email"/>
+    <div style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Lastname Error</div>
+    <br/>
+    <label for="dateOfBirth">Enter you Birthday: </label>
+    <input type="text" th:field="*{dateOfBirth}" id="dateOfBirth"/>
+    <div style="color: red" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}">dateOfBirth Error</div>
     <br/>
 
     <br/>

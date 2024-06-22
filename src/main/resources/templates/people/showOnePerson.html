@@ -14,10 +14,19 @@
 <label for="lastname">Lastname</label>
 <p th:text="${person.getLastName}" id="lastname">Value</p>
 <hr>
-<label for="year">year</label>
-<p th:text="${person.getYear}" id="year">Value</p>
+<label for="email">Email</label>
+<p th:text="${person.getEmail}" id="email">Value</p>
 <hr>
-
+<label for="mood">Mood</label>
+<p th:text="${person.getMood}" id="mood">Value</p>
+<hr>
+<label for="date_of_birth">Date of Birth</label>
+<p th:text="${person.dateOfBirth}" id="date_of_birth">Value</p>
+<hr>
+<label for="created_date">Created Date</label>
+<p th:text="${person.createdAt}" id="created_date">Value</p>
+<hr>
+<hr>
 <a th:href="@{/people/{id}/edit(id=${person.getId()})}">edit</a>
 
 <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
@@ -33,15 +42,25 @@
     <hr/>
     <b>Книги:</b>
     <br/>
-    <div th:each="book : ${books}">
-        <a th:href="@{/book/{id}(id=${book.getId()})}" th:text="${book.getTitle() + ', ' + book.getAuthor() +', ' + book.getYear()}">book</a>
+    <table th:each="book : ${books}">
+        <tr>
+            <td>
+                <a th:href="@{/book/{id}(id=${book.getId()})}">
+                    <span th:text="${book.getTitle} + ',   ' + ${book.getAuthor}"
+                          th:style="${book.isExpired()} ? 'color : red' : 'color:black'">
+                        book
+                    </span>
+                </a>
 
-    </div>
+            </td>
+        </tr>
+    </table>
+
 
 </div>
 <br>
 <hr>
-<a href="/people">home</a>
+<a href="/people">All People</a>
 
 
 </body>
